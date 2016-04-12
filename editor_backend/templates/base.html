@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" style="font-family: Verdana">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>Editor</title>
+    <link href="{% static "editor_backend/css/style.css" %}" rel="stylesheet">
+
+    {% block title %}
+    {% endblock %}
+
+    {% block css %}
+    {% endblock %}
+
+    {% block script %}
+    {% endblock %}
+</head>
+<body>
+<header>
+    <div class="contentWrapper">
+        <a href="/">
+            <img src="{% static "editor_backend/img/logo.png" %}">
+        </a>
+        <!-- todo: make this render from somewhere else -->
+        <input type="text" id="search" placeholder="Søk (I ustand)">
+    </div>
+</header>
+
+<div id="menu">
+    <!-- Todo: fix menu to render with flask -->
+    <a href="/">Startside</a>
+    <a href="/">Yolo</a>
+    <a href="/">Nyheter</a>
+    <a href="/">Om oss</a>
+</div>
+
+<div class="contentWrapper">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<footer><div style="text-align: center; padding-top: 30px; padding-bottom: 30px; font-size: 12px">
+    Company name <br>
+    Phone: +99 999 99 999
+</div></footer>
+</body>
+</html>
