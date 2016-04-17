@@ -42,3 +42,6 @@ def articles(request):
 	d = r.json()
 	d["publisher_url"] = publisher_url
 	return render(request, "articles.html", d);
+
+def search(request):
+    return render(request, "search.html", {});
