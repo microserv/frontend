@@ -22,7 +22,7 @@
             <img src="{% static "editor_backend/img/logo.png" %}">
         </a>
         <!-- todo: make this render from somewhere else -->
-        <input type="text" id="search" placeholder="Søk (I ustand)">
+        <button id="searchBtn">Search</button>
     </div>
 </header>
 
@@ -39,9 +39,11 @@
     {% endblock %}
 </div>
 
-<footer><div style="text-align: center; padding-top: 30px; padding-bottom: 30px; font-size: 12px">
+<footer><div id="footerContainer">
+    <p>
     Company name <br>
     Phone: +99 999 99 999
+    </p>
 </div></footer>
 </body>
 </html>
