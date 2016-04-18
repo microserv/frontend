@@ -17,7 +17,7 @@
 <body>
 <header>
     <div class="contentWrapper">
-        <a href="/">
+        <a href="{% url 'homepage' %}">
             <img src="{% static "editor_backend/img/logo.png" %}">
         </a>
         <a id="searchBtn" href="{% url 'search' %}">Søk</a>
@@ -26,10 +26,11 @@
 
 <div id="menu">
     <!-- Todo: fix menu to render with flask -->
-    <a href="/">Startside</a>
-    <a href="/">Yolo</a>
+    <a href="{% url 'homepage' %}">Startside</a>
+    <a href="{% url 'editor' %}">Editor</a>
     <a href="/">Nyheter</a>
-    <a href="/">Om oss</a>
+    <a href="{% url 'articles' %}">Artikler</a>
+    <a href="{% url 'about' %}">Om oss</a>
 </div>
 
 <div id="mainContent" class="contentWrapper">
