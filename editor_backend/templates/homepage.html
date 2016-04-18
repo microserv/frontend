@@ -1,11 +1,30 @@
 {% extends "base.html" %}
 
 {% block title %}
-<title>Homepage</title>
+{% load staticfiles %}
+<title>Company name</title>
 {% endblock %}
 
 {% block content %}
-<h1>This is the homepage.</h1>
-<a href="/editor/">Go to editor</a>
-<a href="/articles/">Go to articles</a>
+<h1>Velkommen</h1>
+
+<div class="half">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius odio ut consectetur scelerisque. Donec at dui sed libero bibendum suscipit eget quis velit. Mauris auctor eget dolor quis imperdiet. Fusce ultrices urna arcu, sed pharetra tortor molestie non. Morbi feugiat ligula ligula, sit amet porttitor libero sollicitudin ac. Duis a metus ac tellus aliquam semper. Pellentesque ut porttitor velit.
+    </p>
+    <p>
+        Quisque non eros a ex commodo varius. Vivamus bibendum aliquet nisl, sed tristique est congue nec. Phasellus feugiat aliquam augue, id ultricies lectus suscipit sed. Maecenas vel tincidunt libero. Pellentesque dignissim placerat nisi, sit amet lobortis diam tincidunt vitae. Cras eu magna eleifend, lobortis elit id, tincidunt mi. Pellentesque elementum, erat ac pellentesque cursus, ipsum tortor finibus nunc, sed commodo risus orci in odio.
+    </p>
+    <p>
+        Cras congue lorem vel dui gravida, in feugiat orci aliquet. Vestibulum eleifend magna diam, vel semper dui varius at. Morbi est nunc, fringilla sed quam eget, finibus cursus nisl. Aenean quis tortor sed velit convallis feugiat. Maecenas tempus tellus id leo bibendum vulputate eu sed magna. Proin non erat congue, laoreet metus eu, maximus lacus. Sed ut leo eget metus blandit tempus. Nulla dignissim eget mi eu elementum. Curabitur hendrerit sodales turpis, euismod convallis nulla sagittis commodo. Quisque maximus nulla nec elit ullamcorper tempor. Mauris a sapien ultrices, tristique lectus ac, luctus ex. Phasellus ut neque eu nunc consectetur iaculis.
+    </p>
+</div>
+<img src="{% static 'editor_backend/img/stock/suit.jpg' %}" class="half">
+
+<p>
+    Quisque aliquam mattis elementum. Nullam orci purus, vulputate id laoreet ut, porttitor nec nisl. Aliquam efficitur luctus odio, id blandit erat pulvinar eget. Nam iaculis dolor arcu, pharetra gravida nisi scelerisque non. In gravida pretium tincidunt. Aliquam a lectus vitae metus euismod pulvinar. Vestibulum mollis, mi vitae eleifend convallis, mi justo pharetra lectus, eget maximus augue tortor et magna. Fusce efficitur ex quis mi luctus, sed fringilla mauris malesuada. Donec maximus nibh eu velit vehicula interdum.
+</p>
+<p>
+    Duis fermentum eros a velit consequat sodales. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula metus elementum accumsan sodales. Sed sed ultrices risus. Mauris felis tortor, placerat sit amet lectus sit amet, tempor faucibus purus. Suspendisse euismod rhoncus nisl at tempor. Vivamus posuere vulputate tortor, ac aliquam elit posuere sit amet. Aenean sed justo at sapien imperdiet rutrum a eget augue. Aliquam iaculis elementum metus. Aenean eu lectus rutrum, blandit nisi placerat, tempus tellus. Quisque ut efficitur lorem. Nam mollis scelerisque mauris ac vehicula.
+</p>
 {% endblock %}

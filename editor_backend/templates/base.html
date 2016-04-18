@@ -3,8 +3,7 @@
 <head>
     {% load staticfiles %}
     <meta charset="UTF-8">
-    <title>Editor</title>
-    <link href="{% static "editor_backend/css/style.css" %}" rel="stylesheet">
+    <link href="{% static 'editor_backend/css/style.css' %}" rel="stylesheet">
 
     {% block title %}
     {% endblock %}
@@ -18,23 +17,23 @@
 <body>
 <header>
     <div class="contentWrapper">
-        <a href="/">
-            <img src="{% static "editor_backend/img/logo.png" %}">
+        <a href="{% url 'homepage' %}">
+            <img src="{% static 'editor_backend/img/logo.png' %}">
         </a>
-        <!-- todo: make this render from somewhere else -->
-        <button id="searchBtn">Search</button>
+        <a id="searchBtn" href="/">Login</a>
     </div>
 </header>
 
 <div id="menu">
     <!-- Todo: fix menu to render with flask -->
-    <a href="/">Startside</a>
-    <a href="/">Yolo</a>
-    <a href="/">Nyheter</a>
-    <a href="/">Om oss</a>
+    <a href="{% url 'homepage' %}">Startside</a>
+    <a href="{% url 'articles' %}">Artikler</a>
+    <a href="{% url 'editor' %}">Editor</a>
+    <a href="{% url 'about' %}">Om oss</a>
+    <a href="{% url 'search' %}">Søk</a>
 </div>
 
-<div class="contentWrapper">
+<div id="mainContent" class="contentWrapper">
     {% block content %}
     {% endblock %}
 </div>
@@ -42,7 +41,7 @@
 <footer><div id="footerContainer">
     <p>
     Company name <br>
-    Phone: +99 999 99 999
+    Telefon: +99 999 99 999
     </p>
 </div></footer>
 </body>

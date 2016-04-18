@@ -23,14 +23,18 @@ from editor_backend.views import homepage
 from editor_backend.views import editor
 from editor_backend.views import upload_article
 from editor_backend.views import articles
+from editor_backend.views import search
+from editor_backend.views import about
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-	url(r'^$', homepage),
-	url(r'^editor/upload_article', upload_article),
-	url(r'^editor/', editor),
-	url(r'^articles/', articles),
+    url(r'^admin/', admin.site.urls, name='admin_site'),
+	url(r'^$', homepage, name='homepage'),
+	url(r'^editor/upload_article', upload_article, name='upload_article'),
+	url(r'^editor/', editor, name='editor'),
+	url(r'^articles/', articles, name='articles'),
+	url(r'^search/', search, name='search'),
+	url(r'^about/', about, name='about'),
 ]
 
 if settings.DEBUG:
