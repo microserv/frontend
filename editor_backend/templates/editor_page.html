@@ -6,14 +6,14 @@
 <title>Editor</title>
 
 <!-- include libraries(jQuery, bootstrap) -->
-<link href="{% static "editor_backend/css/bootstrap.css" %}" rel="stylesheet">
-<script src="{% static "editor_backend/tools/jquery.js" %}"></script>
-<script src="{% static "editor_backend/tools/bootstrap.js" %}"></script>
+<link href="{% static 'editor_backend/css/bootstrap.css' %}" rel="stylesheet">
+<script src="{% static 'editor_backend/tools/jquery.js' %}"></script>
+<script src="{% static 'editor_backend/tools/bootstrap.js' %}"></script>
 
 <!-- include summernote css/js-->
-<link href="{% static "editor_backend/css/summernote.css" %}" rel="stylesheet">
-<script src="{% static "editor_backend/summernote.js" %}"></script>
-<script src="{% static "editor_backend/lang/summernote-nb-NO.js" %}"></script>
+<link href="{% static 'editor_backend/css/summernote.css' %}" rel="stylesheet">
+<script src="{% static 'editor_backend/summernote.js' %}"></script>
+<script src="{% static 'editor_backend/lang/summernote-nb-NO.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -50,7 +50,7 @@
 
                 }
 
-                httpGetAsync("{% static "editor_backend/templates/article.html" %}")
+                httpGetAsync("{% static 'editor_backend/templates/article.html' %}")
             </script>
 
             <script>

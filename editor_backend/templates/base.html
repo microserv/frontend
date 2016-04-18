@@ -3,7 +3,7 @@
 <head>
     {% load staticfiles %}
     <meta charset="UTF-8">
-    <link href="{% static "editor_backend/css/style.css" %}" rel="stylesheet">
+    <link href="{% static 'editor_backend/css/style.css' %}" rel="stylesheet">
 
     {% block title %}
     {% endblock %}
@@ -18,7 +18,7 @@
 <header>
     <div class="contentWrapper">
         <a href="{% url 'homepage' %}">
-            <img src="{% static "editor_backend/img/logo.png" %}">
+            <img src="{% static 'editor_backend/img/logo.png' %}">
         </a>
         <a id="searchBtn" href="/">Login</a>
     </div>
@@ -27,9 +27,8 @@
 <div id="menu">
     <!-- Todo: fix menu to render with flask -->
     <a href="{% url 'homepage' %}">Startside</a>
-    <a href="{% url 'editor' %}">Editor</a>
-    <a href="/">Nyheter</a>
     <a href="{% url 'articles' %}">Artikler</a>
+    <a href="{% url 'editor' %}">Editor</a>
     <a href="{% url 'about' %}">Om oss</a>
     <a href="{% url 'search' %}">Søk</a>
 </div>
