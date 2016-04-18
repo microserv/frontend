@@ -31,6 +31,7 @@ urlpatterns = [
 	url(r'^editor/upload_article', upload_article),
 	url(r'^editor/', editor),
 	url(r'^articles/', articles),
+	url(r'^search/', search),
 ]
 
 if settings.DEBUG:

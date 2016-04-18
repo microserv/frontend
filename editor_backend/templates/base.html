@@ -21,8 +21,7 @@
         <a href="/">
             <img src="{% static "editor_backend/img/logo.png" %}">
         </a>
-        <!-- todo: Give this a proper href -->
-        <button id="searchBtn" href="{{ url_for('search') }}">Search</button>
+        <button id="searchBtn" href="{% url 'search' %}">Search</button>
     </div>
 </header>
 
