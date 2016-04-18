@@ -23,6 +23,7 @@ from editor_backend.views import homepage
 from editor_backend.views import editor
 from editor_backend.views import upload_article
 from editor_backend.views import articles
+from editor_backend.views import search
 
 
 urlpatterns = [
@@ -31,7 +32,7 @@ urlpatterns = [
 	url(r'^editor/upload_article', upload_article),
 	url(r'^editor/', editor),
 	url(r'^articles/', articles),
-	url(r'^search/', search),
+	url(r'^search/', search, name='search'),
 ]
 
 if settings.DEBUG:
