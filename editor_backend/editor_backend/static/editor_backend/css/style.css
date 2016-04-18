@@ -1,3 +1,11 @@
+html {
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 body{
     margin: 0;
     font-family: Verdana, sans-serif;
@@ -42,6 +50,8 @@ header {
 
 #mainContent {
     min-height: 400px;
+    margin-top: 20px;
+    margin-bottom: 70px;
 }
 
 footer {
@@ -131,3 +141,15 @@ a {
     color: black;
     text-decoration: none;
 }
+
+.half {
+    display: inline-block;
+    width: 49%;
+    margin: 0;
+}
+
+.percent40 {
+    display: inline-block;
+    width: 40%;
+}
+
