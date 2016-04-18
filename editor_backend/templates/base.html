@@ -3,7 +3,6 @@
 <head>
     {% load staticfiles %}
     <meta charset="UTF-8">
-    <title>Editor</title>
     <link href="{% static "editor_backend/css/style.css" %}" rel="stylesheet">
 
     {% block title %}
@@ -21,7 +20,7 @@
         <a href="/">
             <img src="{% static "editor_backend/img/logo.png" %}">
         </a>
-        <a id="searchBtn" href="{% url 'search' %}">Search</a>
+        <a id="searchBtn" href="{% url 'search' %}">Søk</a>
     </div>
 </header>
 
@@ -41,7 +40,7 @@
 <footer><div id="footerContainer">
     <p>
     Company name <br>
-    Phone: +99 999 99 999
+    Telefon: +99 999 99 999
     </p>
 </div></footer>
 </body>
