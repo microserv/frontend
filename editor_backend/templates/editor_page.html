@@ -19,7 +19,7 @@
 {% block content %}
 <div class="contentWrapper">
     <div id="editor">
-        <h1>Insert a good title here</h1>
+        <h1>Artikkel</h1>
         <label> Velg en mal:
             <select id="template_selector">
 
@@ -61,9 +61,9 @@
 
     <form action="upload_article" method="post">
 	{% csrf_token %}
-        <div class="publish">Title<input type="text" name="title" placeholder="Article title" required></div>
+        <div class="publish">Tittel<input type="text" name="title" placeholder="Article title" required></div>
         <div class="publish">Tags<input type="text" name="tags" placeholder="Separate with comma" ></div>
-        <div class="publish">Description
+        <div class="publish">Beskrivelse
             <textarea type="text" name="description" placeholder="Short summary of the article" maxlength="500" style="vertical-align: top; width: 300px; max-height:60px" required></textarea>
         </div>
         <div class="publish"><input type="checkbox" name="index" id="index"> Index</div>
