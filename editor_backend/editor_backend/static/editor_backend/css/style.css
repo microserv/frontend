@@ -38,8 +38,12 @@ header {
 }
 
 .contentWrapper {
-    width: 1200px;
+    width: 1200px;;
     margin: 0 auto;
+}
+
+#mainContent {
+    min-height: 400px;
 }
 
 #menu {
@@ -132,8 +136,4 @@ input {
 a {
     color: black;
     text-decoration: none;
-}
-
-#searchResultContainer {
-    min-height: 300px;
 }
