@@ -35,13 +35,7 @@ function init() {
 
     searchInput.addEventListener("keyup", search);
 
-    /**
-     * This is testcode and shoudl be removed later
-     */
-    for (var i = 0; i < 10; i++){
-        results[i] = {"title": i, desc:i + " Praesent sed magna congue, egestas urna eu, posuere est.",
-        "article": "long shit", "url":"/"}
-    }
+
 
 
 }
@@ -51,6 +45,18 @@ function init() {
  */
 function search() {
     var results = [];
+
+    /**
+     * This is testcode and shoudl be removed later
+     */
+    for (var i = 0; i < 10; i++){
+        results[i] = {"title": i, desc:i + " Praesent sed magna congue, egestas urna eu, posuere est.",
+            "article": "long shit", "url":"/"}
+    }
+    /**
+     * End of test code
+     */
+
 
     for (var i = 0; i< results.length; i++){
         addArticleToResult(results[i]);
