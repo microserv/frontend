@@ -1,25 +1,22 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
 {% block title %}
 <title>Search</title>
 {% endblock %}
 
 {% block script %}
 <!-- todo: make a JS which calls the search service when necessary with correct calls-->
+<script src="{% static 'editor_backend/script/search.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<h1>Søk</h1>
-<input id="searchField">
-
-<div id="searchResultContainer">
-    <!-- Articles should be displayed on following format:
-    <div class="searchResult">
-        <a href="link to the article">
-            <h3> Article title </h3>
-            <p> Article desc </p>
-        </a>
-    </div> -->
+<div id="searchContainer">
+    <h1>Søk</h1>
+    <div id="searchFieldContainer">
+        <input id="searchField">
+        <div id="searchResultContainer"></div>
+    </div>
 
 </div>
 {% endblock %}
