@@ -23,5 +23,4 @@ WORKDIR ${BASE_DIR}/editor_backend
 RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
 
-ENTRYPOINT ["/bin/sh"]
 EXPOSE 80
