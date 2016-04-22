@@ -1,4 +1,4 @@
-FROM backend-comm
+FROM localhost:5000/backend-comm
 MAINTAINER Pål Karlsrud <paal@128.no>
 
 ENV BASE_DIR /var/frontend
@@ -23,4 +23,5 @@ WORKDIR ${BASE_DIR}/editor_backend
 RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
 
+ENTRYPOINT ["/bin/sh"]
 EXPOSE 80
