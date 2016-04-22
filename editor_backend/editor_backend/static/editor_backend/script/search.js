@@ -46,13 +46,17 @@ function init() {
 function search() {
     var results = [];
 
+    var searchWords = searchInput.value.split(" ");
+    wordSuggestion(searchWords[searchWords.length-1], searchWords.length-1);
+
     /**
      * This is testcode and shoudl be removed later
      */
+    /*
     for (var i = 0; i < 10; i++){
         results[i] = {"title": i, desc:i + " Praesent sed magna congue, egestas urna eu, posuere est.",
             "article": "long shit", "url":"/"}
-    }
+    } */
     /**
      * End of test code
      */
@@ -60,6 +64,20 @@ function search() {
 
     for (var i = 0; i< results.length; i++){
         addArticleToResult(results[i]);
+    }
+}
+
+
+function wordSuggestion(word, searchLenght) {
+    var suggestionField = document.getElementById("wordSuggestionField");
+    if (word != "") {
+         suggestionField.innerHTML = "<button id='wordSuggestionButton'>" + word +" </button>";
+        var margin = 35*searchLenght;
+        document.getElementById("wordSuggestionButton").style.marginLeft =   margin + "px";
+        //searchResultHtml.innerHTML+= "test <br>";
+    }
+    else {
+        suggestionField.innerHTML = "";
     }
 }
 
