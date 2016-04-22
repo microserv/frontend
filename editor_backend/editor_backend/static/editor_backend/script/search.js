@@ -21,9 +21,6 @@ var dummyArticle = {"title":"Article title",
                     "url":"/"};
 
 
-
-
-
 window.onload = function() {
     init();
 };
@@ -36,8 +33,6 @@ function init() {
     searchInput.addEventListener("keyup", search);
 
 
-
-
 }
 
 /**
@@ -46,42 +41,47 @@ function init() {
 function search() {
     var results = [];
 
+    // Splits the search and sends the current word and total search length to
+    // the word suggestion function
     var searchWords = searchInput.value.split(" ");
-    wordSuggestion(searchWords[searchWords.length-1], searchWords.length-1);
-
-    /**
-     * This is testcode and shoudl be removed later
-     */
-    /*
-    for (var i = 0; i < 10; i++){
-        results[i] = {"title": i, desc:i + " Praesent sed magna congue, egestas urna eu, posuere est.",
-            "article": "long shit", "url":"/"}
-    } */
-    /**
-     * End of test code
-     */
-
+    wordSuggestion(searchWords[searchWords.length-1], searchInput.value.length);
 
     for (var i = 0; i< results.length; i++){
         addArticleToResult(results[i]);
     }
 }
 
-
-function wordSuggestion(word, searchLenght) {
+/**
+ * Takes in a word and the current search length and provides a button for
+ * suggesting a different word if it is a possibility that it is misspelled.
+ * @param word
+ * @param searchLength
+ */
+function wordSuggestion(word, searchLength) {
+    searchLength = searchLength - word.length;
     var suggestionField = document.getElementById("wordSuggestionField");
     if (word != "") {
          suggestionField.innerHTML = "<button id='wordSuggestionButton'>" + word +" </button>";
-        var margin = 35*searchLenght;
+        var margin = 0;
+
+        if (searchLength > 5 ) {
+            margin = (8.2 * searchLength) +5;
+            if (margin > 700) {
+                margin = 700;  //prevents the suggestions from goint out of the screen
+            }
+        }
+        // Aligns the suggestion with where you are in the input field
         document.getElementById("wordSuggestionButton").style.marginLeft =   margin + "px";
-        //searchResultHtml.innerHTML+= "test <br>";
     }
     else {
         suggestionField.innerHTML = "";
     }
 }
 
-
+/**
+ * Takes in an article and adds it to the results in the view
+ * @param article
+ */
 function addArticleToResult(article) {
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +

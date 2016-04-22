@@ -165,3 +165,8 @@ a {
     width: 40%;
 }
 
+
+#wordSuggestionButton {
+    background: none;
+    border: 1px solid black;
+}
