@@ -6,7 +6,7 @@ import json
 import requests
 
 NODE_ADDR = "http://127.0.0.1:9001"
-publish_base_url = "despina.128.no/publish"
+publish_base_url = "http://despina.128.no/publish"
 
 def get_publisher_url():
 	r = requests.get(NODE_ADDR + "/" + "publish")
