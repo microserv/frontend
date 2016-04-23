@@ -9,7 +9,7 @@ NODE_ADDR = "http://127.0.0.1:9001"
 publish_base_url = "http://despina.128.no/publish"
 
 def get_publisher_url():
-	r = requests.get(NODE_ADDR + "/" + "publish")
+	r = requests.get(NODE_ADDR + "/" + "publishing")
 	response_as_json = json.loads(r.text)
 	if response_as_json:
 		return response_as_json
