@@ -6,6 +6,7 @@ import json
 import requests
 
 NODE_ADDR = "http://127.0.0.1:9001"
+publish_base_url = "despina.128.no/publish"
 
 def get_publisher_url():
 	r = requests.get(NODE_ADDR + "/" + "publish")
@@ -51,9 +52,9 @@ def upload_article(request):
 	return render(request, "editor_page.html", {});
 
 def articles(request):
-	r = requests.get(publisher_url+"/list")
+	r = requests.get(publish_base_url + "/list")
 	d = r.json()
-	d["publisher_url"] = publisher_url
+	d["publisher_url"] = publish_base_url
 	return render(request, "articles.html", d);
 
 def search(request):
