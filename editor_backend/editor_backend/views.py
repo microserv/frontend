@@ -38,12 +38,12 @@ def upload_article(request):
 		article["index"] = "off"
 	
 	publisher_url = get_publisher_url()
-        if publisher_url:
-            r = requests.post("http://"+publisher_url+"/save_article", data = article)
-        else:
-            # Do some error handling here.
-            pass
-	
+	if publisher_url:
+		r = requests.post("http://"+publisher_url+"/save_article", data = article)
+	else:
+		# Do some error handling here.
+		pass
+
 	#js = json.dumps(article)
 	#jf = open('js.json', 'w')
 	#jf.write(js)
