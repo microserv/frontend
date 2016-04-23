@@ -5,7 +5,15 @@ from django.shortcuts import render
 import json
 import requests
 
-publisher_url = "http://127.0.0.1:3000"
+NODE_ADDR = "http://127.0.0.1:9001"
+
+def get_publisher_url():
+	r = requests.get(NODE_ADDR + "/" + "publish")
+	response_as_json = json.loads(r.text)
+	if response_as_json:
+		return response_as_json
+	else:
+		return None
 
 def homepage(request):
 	return render(request, "homepage.html", {});
@@ -28,7 +36,12 @@ def upload_article(request):
 	else:
 		article["index"] = "off"
 	
-	r = requests.post(publisher_url+"/save_article", data = article)
+	publisher_url = get_publisher_url()
+        if publisher_url:
+            r = requests.post("http://"+publisher_url+"/save_article", data = article)
+        else:
+            # Do some error handling here.
+            pass
 	
 	#js = json.dumps(article)
 	#jf = open('js.json', 'w')
