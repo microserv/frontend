@@ -1,28 +1,7 @@
-var loglevel = 0;
 var searchResultHtml;
 var searchInput;
 var currentSuggestion = "";
 var completeSearch = false;
-var dummyArticle = {
-    "title": "Article title",
-
-    "desc": "Praesent sed magna congue, egestas urna eu, posuere est. " +
-    "Nulla pretium dolor nec velit egestas, sit amet auctor dui tempus.",
-
-    "article": "Interdum et malesuada fames ac ante ipsum primis in faucibus." +
-    " Aenean a mattis nibh, ac luctus augue. Vestibulum eleifend, massa et vehicula " +
-    "volutpat, nulla sapien malesuada leo, at posuere quam magna et neque. Morbi ut " +
-    "ante auctor, pretium sem vel, iaculis libero. Pellentesque dictum ipsum ac dolor " +
-    "consectetur, maximus sodales neque dapibus. Fusce efficitur eros ac nisi auctor, " +
-    "id rhoncus augue feugiat. Phasellus turpis massa, dictum quis arcu vitae, " +
-    "ultrices hendrerit dolor. Curabitur dapibus dapibus dui et semper. Nunc dui leo, " +
-    "suscipit at efficitur eu, consectetur et eros. Phasellus id semper ligula. " +
-    "Maecenas laoreet lectus in ante congue mattis. Vivamus mattis tortor at odio " +
-    "varius tincidunt.",
-
-    "url": "/"
-};
-
 
 window.onload = function () {
     init();
@@ -37,11 +16,9 @@ function init() {
 }
 
 function keyboardHandler(e) {
-    if (loglevel > 5) console.log("keyboardHandler");
-
     switch (e.keyCode) {
         case 40:
-            replaceSuggestion();
+            replaceWordSuggestion();
             break;
         case 13:
             search();
@@ -63,7 +40,6 @@ function keyboardHandler(e) {
  * TODO: Make this do a real search based on the content of searchInput
  */
 function search() {
-    if (loglevel > 5) console.log("search");
     if (searchInput.value != "") {
         completeSearch = true;
 
@@ -103,20 +79,17 @@ function search() {
 
 
 function wipeResults() {
-    if (loglevel > 5) console.log("wipeResults");
     searchResultHtml.innerHTML = "";
 }
 
 
 function wipeWordSuggestion() {
-    if (loglevel > 5) console.log("wipeWordSuggestions");
     document.getElementById("wordSuggestionField").innerHTML = "";
     currentSuggestion = "";
 }
 
 
 function wordSuggestion() {
-    if (loglevel > 5) console.log("Word suggestion");
     var fakeResultPartial = {'spell': [['jge', 'jeg'], ['er', 'er']]};
     var tempWord = fakeResultPartial.spell[fakeResultPartial.spell.length - 1][1];
     var searchLength = searchInput.value.length - tempWord.length;
@@ -132,17 +105,16 @@ function wordSuggestion() {
  * @param searchLength
  */
 function displayWordSuggestion(word, searchLength) {
-    if (loglevel > 5) console.log("Word suggestion");
     currentSuggestion = word;
     searchLength = searchLength - word.length;
     var suggestionField = document.getElementById("wordSuggestionField");
     if (word != "") {
         if (completeSearch) {
-            suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceSuggestion()'>"
+            suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceWordSuggestion()'>"
                 + "Mente du: " + word + " </button>";
         }
         else {
-            suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceSuggestion()'>"
+            suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceWordSuggestion()'>"
                 + word + " </button>";
         }
         var margin = 0;
@@ -161,11 +133,10 @@ function displayWordSuggestion(word, searchLength) {
     }
 }
 
-function replaceSuggestion() {
+function replaceWordSuggestion() {
     if (completeSearch) {
         searchInput.value = "";
     }
-    if (loglevel > 5) console.log("replaceSuggestion");
     if (currentSuggestion != "") {
         var searchWords = searchInput.value.split(" ");
         searchWords[searchWords.length - 1] = currentSuggestion;
@@ -184,7 +155,6 @@ function replaceSuggestion() {
  * @param article
  */
 function addArticleToResult(article) {
-    if (loglevel > 5) console.log("addArticleToResult");
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
         '<a href=" ' + article.url + ' "> ' +
