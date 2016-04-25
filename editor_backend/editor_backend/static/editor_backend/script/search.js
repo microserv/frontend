@@ -1,7 +1,9 @@
 
 
+var loglevel = 0;
 var searchResultHtml;
 var searchInput;
+var currentSuggestion = "";
 var dummyArticle = {"title":"Article title",
 
                     "desc":"Praesent sed magna congue, egestas urna eu, posuere est. " +
@@ -30,8 +32,15 @@ function init() {
     searchResultHtml = document.getElementById("searchResultContainer");
     searchInput = document.getElementById("searchField");
 
-    searchInput.addEventListener("keyup", search);
+    searchInput.addEventListener("keyup", keyboardHandler);
+}
 
+function keyboardHandler(e) {
+    if (loglevel > 5) console.log("keyboardHandler");
+
+    if (e.keyCode == 40) {replaceSuggestion();}
+    else if (e.keyCode ==13) {console.log("This should force-search");}
+    else {search();}
 
 }
 
@@ -39,16 +48,57 @@ function init() {
  * TODO: Make this do a real search based on the content of searchInput
  */
 function search() {
-    var results = [];
+    if (loglevel > 5) console.log("search");
+    if (searchInput.value != "") {
+        console.log(searchInput.value + " This is a value")
+        var results = [];
 
-    // Splits the search and sends the current word and total search length to
-    // the word suggestion function
-    var searchWords = searchInput.value.split(" ");
-    wordSuggestion(searchWords[searchWords.length-1], searchInput.value.length);
+        /** TODO: What does partial really mean?
+         * When do I know if its partial or not?
+         * Can we just get one suggestion at a time ? last completed word probs from me
+         *
+         *
+         */
 
-    for (var i = 0; i< results.length; i++){
-        addArticleToResult(results[i]);
+        //todo: Send request to search with {'Partial':'true/false', 'Query':'string'}
+        var fakeResultPartial = {'spell': [['jge', 'jeg'], ['er', 'er']]};
+
+        wordSuggestion(fakeResultPartial.spell[fakeResultPartial.spell.length - 1][1], searchInput.value.length);
+
+
+        // Splits the search and sends the current word and total search length to
+        // the word suggestion function
+        var searchWords = searchInput.value.split(" ");
+        //wordSuggestion(searchWords[searchWords.length-1], searchInput.value.length);
+
+        if (searchWords.length > 2){
+            // TODO: Probs create a function for all this which can be force-called upon enter or search button
+            wipeResults();
+            //TODO: use the URIs to get the real articles
+            results = {'spell': [['jge', 'jeg'], ['er', 'er']], 'results':['URI1', 'URI2', 'URI1' ]}.results;
+            for (var i = 0; i < results.length; i++) {
+                addArticleToResult(results[i]);
+            }
+        }
     }
+    else {
+        wipeWordSuggestion();
+        wipeResults();
+    }
+}
+
+
+
+function wipeResults() {
+    if (loglevel > 5) console.log("wipeResults");
+    searchResultHtml.innerHTML = "";
+}
+
+
+function wipeWordSuggestion() {
+    if (loglevel > 5) console.log("wipeWordSuggestions");
+    document.getElementById("wordSuggestionField").innerHTML ="";
+    currentSuggestion = "";
 }
 
 /**
@@ -58,16 +108,19 @@ function search() {
  * @param searchLength
  */
 function wordSuggestion(word, searchLength) {
+    if (loglevel > 5) console.log("Word suggestion");
+    currentSuggestion = word;
     searchLength = searchLength - word.length;
     var suggestionField = document.getElementById("wordSuggestionField");
     if (word != "") {
-         suggestionField.innerHTML = "<button id='wordSuggestionButton'>" + word +" </button>";
+         suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceSuggestion()'>"
+             + word +" </button>";
         var margin = 0;
 
-        if (searchLength > 5 ) {
+        if (searchLength > word.length ) {
             margin = (8.2 * searchLength) +5;
             if (margin > 700) {
-                margin = 700;  //prevents the suggestions from goint out of the screen
+                margin = 700;  //prevents the suggestions from going out of the screen
             }
         }
         // Aligns the suggestion with where you are in the input field
@@ -78,11 +131,27 @@ function wordSuggestion(word, searchLength) {
     }
 }
 
+function replaceSuggestion() {
+    if (loglevel > 5) console.log("replaceSuggestion");
+    if (currentSuggestion != "") {
+        var searchWords = searchInput.value.split(" ");
+        searchWords[searchWords.length - 1] = currentSuggestion;
+
+        var newString = "";
+        for (var i = 0; i < searchWords.length; i++) {
+            newString += searchWords[i] + " ";
+        }
+        searchInput.value = newString;
+        wipeWordSuggestion();
+    }
+}
+
 /**
  * Takes in an article and adds it to the results in the view
  * @param article
  */
 function addArticleToResult(article) {
+    if (loglevel > 5) console.log("addArticleToResult");
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
         '<a href=" '+ article.url+' "> ' +

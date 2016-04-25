@@ -130,6 +130,8 @@ input {
     width: 100%;
     padding-bottom: 1px;
     margin: 0;
+    background-color: white;
+    color: black;
 }
 
 #searchFieldContainer {
@@ -169,4 +171,8 @@ a {
 #wordSuggestionButton {
     background: none;
     border: 1px solid black;
+}
+
+#wordSuggestionField {
+    height: 20px;
 }
