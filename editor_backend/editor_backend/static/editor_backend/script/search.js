@@ -39,21 +39,19 @@ function keyboardHandler(e) {
 /**
  * TODO: Make this do a real search based on the content of searchInput
  */
+
+/**
+ * Handles requests towards search and displaying results
+ */
 function search() {
     if (searchInput.value != "") {
         completeSearch = true;
 
         //todo: Send request to search with {'Partial':'true/false', 'Query':'string'}
-
-
-        // Splits the search and sends the current word and total search length to
-        // the word suggestion function
-        var searchWords = searchInput.value.split(" ");
-        //wordSuggestion(searchWords[searchWords.length-1], searchInput.value.length);
-
-        // TODO: Probs create a function for all this which can be force-called upon enter or search button
-        wipeResults();
         //TODO: use the URIs to get the real articles
+        var searchWords = searchInput.value.split(" ");
+
+        wipeResults();
 
         var searchResult = {'spell': [['jge', 'jeg'], ['er', 'er']], 'results': ['URI1', 'URI2', 'URI1']};
         for (var i = 0; i < searchResult.results.length; i++) {
@@ -77,18 +75,25 @@ function search() {
     }
 }
 
-
+/**
+ * Resets the search results
+ */
 function wipeResults() {
     searchResultHtml.innerHTML = "";
 }
 
-
+/**
+ * Resets the word suggestion
+ */
 function wipeWordSuggestion() {
     document.getElementById("wordSuggestionField").innerHTML = "";
     currentSuggestion = "";
 }
 
-
+/**
+ * Handles the logic around asking the search service for word suggestions and
+ * providing displayWordSuggestion() with necessary info
+ */
 function wordSuggestion() {
     var fakeResultPartial = {'spell': [['jge', 'jeg'], ['er', 'er']]};
     var tempWord = fakeResultPartial.spell[fakeResultPartial.spell.length - 1][1];
