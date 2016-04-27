@@ -20,7 +20,6 @@ RUN pip install -r requirements.txt
 RUN pip install gunicorn
 
 WORKDIR ${BASE_DIR}/editor_backend
-RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 80
