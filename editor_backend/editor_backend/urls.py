@@ -18,7 +18,6 @@ from django.conf.urls import patterns
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.contrib.staticfiles import views
-from django.contrib import admin
 from editor_backend.views import homepage
 from editor_backend.views import editor
 from editor_backend.views import upload_article
@@ -28,13 +27,12 @@ from editor_backend.views import about
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls, name='admin_site'),
-	url(r'^$', homepage, name='homepage'),
-	url(r'^editor/upload_article', upload_article, name='upload_article'),
-	url(r'^editor/', editor, name='editor'),
-	url(r'^articles/', articles, name='articles'),
-	url(r'^search/', search, name='search'),
-	url(r'^about/', about, name='about'),
+    url(r'^$', homepage, name='homepage'),
+    url(r'^editor/upload_article', upload_article, name='upload_article'),
+    url(r'^editor/', editor, name='editor'),
+    url(r'^articles/', articles, name='articles'),
+    url(r'^search/', search, name='search'),
+    url(r'^about/', about, name='about'),
 ]
 
 if settings.DEBUG:
