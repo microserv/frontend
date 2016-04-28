@@ -1,27 +1,9 @@
-
-
 var searchResultHtml;
 var searchInput;
-var dummyArticle = {"title":"Article title",
+var currentSuggestion = "";
+var completeSearch = false;
 
-                    "desc":"Praesent sed magna congue, egestas urna eu, posuere est. " +
-                    "Nulla pretium dolor nec velit egestas, sit amet auctor dui tempus.",
-
-                    "article":"Interdum et malesuada fames ac ante ipsum primis in faucibus." +
-                    " Aenean a mattis nibh, ac luctus augue. Vestibulum eleifend, massa et vehicula " +
-                    "volutpat, nulla sapien malesuada leo, at posuere quam magna et neque. Morbi ut " +
-                    "ante auctor, pretium sem vel, iaculis libero. Pellentesque dictum ipsum ac dolor " +
-                    "consectetur, maximus sodales neque dapibus. Fusce efficitur eros ac nisi auctor, " +
-                    "id rhoncus augue feugiat. Phasellus turpis massa, dictum quis arcu vitae, " +
-                    "ultrices hendrerit dolor. Curabitur dapibus dapibus dui et semper. Nunc dui leo, " +
-                    "suscipit at efficitur eu, consectetur et eros. Phasellus id semper ligula. " +
-                    "Maecenas laoreet lectus in ante congue mattis. Vivamus mattis tortor at odio " +
-                    "varius tincidunt.",
-
-                    "url":"/"};
-
-
-window.onload = function() {
+window.onload = function () {
     init();
 };
 
@@ -30,26 +12,137 @@ function init() {
     searchResultHtml = document.getElementById("searchResultContainer");
     searchInput = document.getElementById("searchField");
 
-    searchInput.addEventListener("keyup", search);
+    searchInput.addEventListener("keyup", keyboardHandler);
+}
 
-
+function keyboardHandler(e) {
+    switch (e.keyCode) {
+        case 40:
+            replaceWordSuggestion();
+            break;
+        case 13:
+            search();
+            break;
+        case 32:
+            wipeWordSuggestion();
+            wordSuggestion();
+            break;
+        case 8:
+            wipeWordSuggestion();
+            break;
+        default:
+            completeSearch = false;
+            break;
+    }
 }
 
 /**
- * TODO: Make this do a real search based on the content of searchInput
+ * Handles requests towards search and displaying results
  */
 function search() {
-    var results = [];
+    if (searchInput.value != "") {
+        completeSearch = true;
+        var searchServer = "http://despina.128.no/api/search";
+        var articleServer ="http://despina.128.no/publish/article_json/";
 
-    // Splits the search and sends the current word and total search length to
-    // the word suggestion function
-    var searchWords = searchInput.value.split(" ");
-    wordSuggestion(searchWords[searchWords.length-1], searchInput.value.length);
+        var searchWords = searchInput.value.split(" ");
 
-    for (var i = 0; i< results.length; i++){
-        addArticleToResult(results[i]);
+        wipeResults();
+
+        var xhtmlSearch = new XMLHttpRequest();
+        xhtmlSearch.open("POST", searchServer);
+        xhtmlSearch.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhtmlSearch.send(JSON.stringify({'Partial':false, 'Query': ''+ searchInput.value }));
+        xhtmlSearch.onreadystatechange = function() {
+
+            if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
+                var results = JSON.parse(xhtmlSearch.responseText);
+                sortResults(results);
+            }
+        };
+
+
+        function retrieveArticles(searchResult) {
+            var xhtmlArticle = new XMLHttpRequest();
+            xhtmlArticle.open("GET", articleServer + searchResult, true);
+
+            xhtmlArticle.send();
+
+            xhtmlArticle.onreadystatechange = function() {
+                if (xhtmlArticle.readyState == 4 && xhtmlArticle.status == 200) {
+                    var article = JSON.parse(xhtmlArticle.responseText);
+                    addArticleToResult(article);
+                }
+            };
+
+        }
+
+        function sortResults(searchResult) {
+            for (var i = 0; i < searchResult.results.length; i++) {
+                retrieveArticles(searchResult.results[i]);
+            }
+
+            var suggestion = "";
+            for (var j = 0; j < searchResult.spell.length; j++){
+                suggestion += searchResult.spell[j][0] +" ";
+            }
+            suggestion = suggestion.slice(0, -1);
+            if (suggestion != searchInput.value) {
+                displayWordSuggestion(suggestion, 0)
+            }
+        }
+    }
+    else {
+        wipeWordSuggestion();
+        wipeResults();
+        completeSearch = false;
     }
 }
+
+/**
+ * Resets the search results
+ */
+function wipeResults() {
+    searchResultHtml.innerHTML = "";
+}
+
+/**
+ * Resets the word suggestion
+ */
+function wipeWordSuggestion() {
+    document.getElementById("wordSuggestionField").innerHTML = "";
+    currentSuggestion = "";
+}
+
+/**
+ * Handles the logic around asking the search service for word suggestions and
+ * providing displayWordSuggestion() with necessary info
+ */
+function wordSuggestion() {
+    var searchServer = "http://despina.128.no/api/search";
+    var searchWords = searchInput.value.split(" ");
+
+    var searchWord = searchWords[searchWords.length -2];
+    var searchLength = searchInput.value.length - searchWords[searchWords.length-1].length - searchWords[0].length;
+    if (searchLength< 0){
+        searchLength = 0;
+    }
+
+    var xhtmlSearch = new XMLHttpRequest();
+    xhtmlSearch.open("POST", searchServer);
+    xhtmlSearch.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhtmlSearch.send(JSON.stringify({'Partial':true, 'Query': ''+ searchWord }));
+    xhtmlSearch.onreadystatechange = function() {
+
+        if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
+            var results = JSON.parse(xhtmlSearch.responseText);
+            if (results.spell[0][0] != searchWord) {
+                displayWordSuggestion(results.spell[0][0], searchLength);
+            }
+        }
+    };
+}
+
 
 /**
  * Takes in a word and the current search length and provides a button for
@@ -57,24 +150,50 @@ function search() {
  * @param word
  * @param searchLength
  */
-function wordSuggestion(word, searchLength) {
-    searchLength = searchLength - word.length;
+function displayWordSuggestion(word, searchLength) {
+    currentSuggestion = word;
+    //searchLength = searchLength - word.length;
     var suggestionField = document.getElementById("wordSuggestionField");
-    if (word != "") {
-         suggestionField.innerHTML = "<button id='wordSuggestionButton'>" + word +" </button>";
+    if (word != "" && word != undefined) {
+        if (completeSearch) {
+            suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceWordSuggestion()'>"
+                + "Mente du: " + word + " </button>";
+        }
+        else {
+            suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceWordSuggestion()'>"
+                + word + " </button>";
+        }
         var margin = 0;
 
-        if (searchLength > 5 ) {
-            margin = (8.2 * searchLength) +5;
+        if (searchLength > word.length) {
+            margin = (8.2 * searchLength) + 5;
             if (margin > 700) {
-                margin = 700;  //prevents the suggestions from goint out of the screen
+                margin = 700;  //prevents the suggestions from going out of the screen
             }
         }
         // Aligns the suggestion with where you are in the input field
-        document.getElementById("wordSuggestionButton").style.marginLeft =   margin + "px";
+        document.getElementById("wordSuggestionButton").style.marginLeft = margin + "px";
     }
     else {
         suggestionField.innerHTML = "";
+    }
+}
+
+function replaceWordSuggestion() {
+    if (completeSearch) {
+        searchInput.value = "";
+    }
+    //Ignore the last element in the list because of the way split on " " generates an extra element
+    if (currentSuggestion != "") {
+        var searchWords = searchInput.value.split(" ");
+        searchWords[searchWords.length - 2] = currentSuggestion;
+
+        var newString = "";
+        for (var i = 0; i < searchWords.length -1; i++) {
+            newString += searchWords[i] + " ";
+        }
+        searchInput.value = newString;
+        wipeWordSuggestion();
     }
 }
 
@@ -85,9 +204,9 @@ function wordSuggestion(word, searchLength) {
 function addArticleToResult(article) {
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
-        '<a href=" '+ article.url+' "> ' +
+        '<a href=" ' + "http://despina.128.no/publish/article/" + article._id + ' "> ' +
         '<h3> ' + article.title + ' </h3> ' +
-        '<p>' + article.desc + ' </p> ' +
+        '<p>' + article.description + ' </p> ' +
         '</a> ' +
         '</div>';
 }
