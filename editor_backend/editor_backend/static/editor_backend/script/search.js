@@ -43,27 +43,21 @@ function search() {
         completeSearch = true;
         var searchServer = "http://despina.128.no/api/search";
         var articleServer ="http://despina.128.no/publish/article_json/";
-        
+
         var searchWords = searchInput.value.split(" ");
 
         wipeResults();
 
-
-        //var searchResult = {'spell': [['jge', 'jeg'], ['er', 'er']], 'results': ['URI1', 'URI2', 'URI1']};
         var xhtmlSearch = new XMLHttpRequest();
         xhtmlSearch.open("post", searchServer, true);
         xhtmlSearch.send("{'Partial':'false', 'Query:'" + searchInput.value + "}");
         xhtmlSearch.onreadystatechange = function() {
 
             if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
-                console.log(xhtmlSearch.responseText);
                 var results = JSON.parse(xhtmlSearch.responseText);
-                for (var i = 0; i< results.results.length; i++){
-                    retrieveArticles(results.results[i]);
-                }
+                sortResults(results)
             }
         };
-
 
 
         function retrieveArticles(searchResult) {
@@ -77,17 +71,13 @@ function search() {
                     var article = JSON.parse(xhtmlArticle.responseText);
                     addArticleToResult(article);
                 }
-                else {
-                    console.log("article: " + xhtmlArticle.readyState + " : " + xhtmlArticle.status )
-                }
             };
 
         }
 
         function sortResults(searchResult) {
-
             for (var i = 0; i < searchResult.results.length; i++) {
-                addArticleToResult(searchResult.results[i]);
+                retrieveArticles(searchResult.results[i]);
             }
 
             var suggestion = "";
@@ -99,9 +89,7 @@ function search() {
                 displayWordSuggestion(suggestion, 0)
             }
         }
-
-
-
+        
     }
     else {
         wipeWordSuggestion();
@@ -130,13 +118,25 @@ function wipeWordSuggestion() {
  * providing displayWordSuggestion() with necessary info
  */
 function wordSuggestion() {
+    var searchServer = "http://despina.128.no/api/search";
+    var searchWords = searchInput.value.split(" ");
 
-    // TODO: Make this load real suggestions
-    var fakeResultPartial = {'spell': [['jge', 'jeg'], ['er', 'er']]};
-    var tempWord = fakeResultPartial.spell[fakeResultPartial.spell.length - 1][1];
-    var searchLength = searchInput.value.length - tempWord.length;
+    var searchWord = searchWords[searchWords.length -2];
+    var searchLength = searchInput.value.length - searchWords[searchWords.length-1].length - searchWords[0].length;
+    if (searchLength< 0){
+        searchLength = 0;
+    }
 
-    displayWordSuggestion(tempWord, searchLength);
+    var xhtmlSearch = new XMLHttpRequest();
+    xhtmlSearch.open("post", searchServer, true);
+    xhtmlSearch.send("{'Partial':'true', 'Query:'" + searchWord + "}");
+    xhtmlSearch.onreadystatechange = function() {
+
+        if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
+            var results = JSON.parse(xhtmlSearch.responseText);
+            displayWordSuggestion(results.spell[0][0], searchLength);
+        }
+    };
 }
 
 
@@ -148,7 +148,7 @@ function wordSuggestion() {
  */
 function displayWordSuggestion(word, searchLength) {
     currentSuggestion = word;
-    searchLength = searchLength - word.length;
+    //searchLength = searchLength - word.length;
     var suggestionField = document.getElementById("wordSuggestionField");
     if (word != "") {
         if (completeSearch) {
@@ -179,12 +179,13 @@ function replaceWordSuggestion() {
     if (completeSearch) {
         searchInput.value = "";
     }
+    //Ignore the last element in the list because of the way split on " " generates an extra element
     if (currentSuggestion != "") {
         var searchWords = searchInput.value.split(" ");
-        searchWords[searchWords.length - 1] = currentSuggestion;
+        searchWords[searchWords.length - 2] = currentSuggestion;
 
         var newString = "";
-        for (var i = 0; i < searchWords.length; i++) {
+        for (var i = 0; i < searchWords.length -1; i++) {
             newString += searchWords[i] + " ";
         }
         searchInput.value = newString;
@@ -197,7 +198,6 @@ function replaceWordSuggestion() {
  * @param article
  */
 function addArticleToResult(article) {
-    console.log("addArticle")
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
         '<a href=" ' + "http://despina.128.no/publish/article/" + article._id + ' "> ' +
