@@ -51,7 +51,7 @@ function search() {
         var xhtmlSearch = new XMLHttpRequest();
         xhtmlSearch.open("POST", searchServer);
         xhtmlSearch.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhtmlSearch.send(JSON.stringify({'Partial':'false', 'Query': ''+ searchInput.value }));
+        xhtmlSearch.send(JSON.stringify({'Partial':false, 'Query': ''+ searchInput.value }));
         xhtmlSearch.onreadystatechange = function() {
 
             if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
@@ -131,7 +131,7 @@ function wordSuggestion() {
     var xhtmlSearch = new XMLHttpRequest();
     xhtmlSearch.open("POST", searchServer);
     xhtmlSearch.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhtmlSearch.send(JSON.stringify({'Partial':'true', 'Query': ''+ searchWord }));
+    xhtmlSearch.send(JSON.stringify({'Partial':true, 'Query': ''+ searchWord }));
     xhtmlSearch.onreadystatechange = function() {
 
         if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
