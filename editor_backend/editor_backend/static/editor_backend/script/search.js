@@ -35,37 +35,72 @@ function keyboardHandler(e) {
     }
 }
 
-
-/**
- * TODO: Make this do a real search based on the content of searchInput
- */
-
 /**
  * Handles requests towards search and displaying results
  */
 function search() {
     if (searchInput.value != "") {
         completeSearch = true;
-
-        //todo: Send request to search with {'Partial':'true/false', 'Query':'string'}
-        //TODO: use the URIs to get the real articles
+        var searchServer = "http://despina.128.no/api/search";
+        var articleServer ="http://despina.128.no/publish/article_json/";
+        
         var searchWords = searchInput.value.split(" ");
 
         wipeResults();
 
-        var searchResult = {'spell': [['jge', 'jeg'], ['er', 'er']], 'results': ['URI1', 'URI2', 'URI1']};
-        for (var i = 0; i < searchResult.results.length; i++) {
-            addArticleToResult(searchResult.results[i]);
+
+        //var searchResult = {'spell': [['jge', 'jeg'], ['er', 'er']], 'results': ['URI1', 'URI2', 'URI1']};
+        var xhtmlSearch = new XMLHttpRequest();
+        xhtmlSearch.open("post", searchServer, true);
+        xhtmlSearch.send("{'Partial':'false', 'Query:'" + searchInput.value + "}");
+        xhtmlSearch.onreadystatechange = function() {
+
+            if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
+                console.log(xhtmlSearch.responseText);
+                var results = JSON.parse(xhtmlSearch.responseText);
+                for (var i = 0; i< results.results.length; i++){
+                    retrieveArticles(results.results[i]);
+                }
+            }
+        };
+
+
+
+        function retrieveArticles(searchResult) {
+            var xhtmlArticle = new XMLHttpRequest();
+            xhtmlArticle.open("GET", articleServer + searchResult, true);
+
+            xhtmlArticle.send();
+
+            xhtmlArticle.onreadystatechange = function() {
+                if (xhtmlArticle.readyState == 4 && xhtmlArticle.status == 200) {
+                    var article = JSON.parse(xhtmlArticle.responseText);
+                    addArticleToResult(article);
+                }
+                else {
+                    console.log("article: " + xhtmlArticle.readyState + " : " + xhtmlArticle.status )
+                }
+            };
+
         }
 
-        var suggestion = "";
-        for (var j = 0; j < searchResult.spell.length; j++){
-            suggestion += searchResult.spell[j][1] +" ";
+        function sortResults(searchResult) {
+
+            for (var i = 0; i < searchResult.results.length; i++) {
+                addArticleToResult(searchResult.results[i]);
+            }
+
+            var suggestion = "";
+            for (var j = 0; j < searchResult.spell.length; j++){
+                suggestion += searchResult.spell[j][1] +" ";
+            }
+            suggestion = suggestion.slice(0, -1);
+            if (suggestion.split(" ") != searchWords) {
+                displayWordSuggestion(suggestion, 0)
+            }
         }
-        suggestion = suggestion.slice(0, -1);
-        if (suggestion.split(" ") != searchWords) {
-            displayWordSuggestion(suggestion, 0)
-        }
+
+
 
     }
     else {
@@ -95,6 +130,8 @@ function wipeWordSuggestion() {
  * providing displayWordSuggestion() with necessary info
  */
 function wordSuggestion() {
+
+    // TODO: Make this load real suggestions
     var fakeResultPartial = {'spell': [['jge', 'jeg'], ['er', 'er']]};
     var tempWord = fakeResultPartial.spell[fakeResultPartial.spell.length - 1][1];
     var searchLength = searchInput.value.length - tempWord.length;
@@ -160,11 +197,12 @@ function replaceWordSuggestion() {
  * @param article
  */
 function addArticleToResult(article) {
+    console.log("addArticle")
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
-        '<a href=" ' + article.url + ' "> ' +
+        '<a href=" ' + "http://despina.128.no/publish/article/" + article._id + ' "> ' +
         '<h3> ' + article.title + ' </h3> ' +
-        '<p>' + article.desc + ' </p> ' +
+        '<p>' + article.description + ' </p> ' +
         '</a> ' +
         '</div>';
 }
