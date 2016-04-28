@@ -27,10 +27,7 @@ def upload_article(request):
 	
 	article = {"tags": dict["tags"], "description": dict["description"], "title": dict["title"]}
 	
-	article_start = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>"
-	article_mid = "</title></head><body>"
-	article_end = "</body></html>"
-	article["article"] = article_start + dict["title"] + article_mid + dict["article"].replace("src=\"//www.", "src=\"http://www.") + article_end
+	article["article"] = dict["article"].replace("src=\"//www.", "src=\"http://www.")
 	
 	if "index" in dict:
 		article["index"] = "on"
