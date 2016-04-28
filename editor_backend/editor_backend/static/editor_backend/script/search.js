@@ -55,7 +55,7 @@ function search() {
 
             if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
                 var results = JSON.parse(xhtmlSearch.responseText);
-                sortResults(results)
+                sortResults(results);
             }
         };
 
@@ -82,14 +82,14 @@ function search() {
 
             var suggestion = "";
             for (var j = 0; j < searchResult.spell.length; j++){
-                suggestion += searchResult.spell[j][1] +" ";
+                suggestion += searchResult.spell[j][0] +" ";
             }
             suggestion = suggestion.slice(0, -1);
-            if (suggestion.split(" ") != searchWords) {
+            if (suggestion != searchInput.value) {
                 displayWordSuggestion(suggestion, 0)
             }
         }
-        
+
     }
     else {
         wipeWordSuggestion();
