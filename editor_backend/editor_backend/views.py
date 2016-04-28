@@ -24,15 +24,8 @@ def editor(request):
 	
 def upload_article(request):
 	dict = request.POST.dict()
-	
 	article = {"tags": dict["tags"], "description": dict["description"], "title": dict["title"]}
-	
 	article["article"] = dict["article"].replace("src=\"//www.", "src=\"http://www.")
-	
-	if "index" in dict:
-		article["index"] = "on"
-	else:
-		article["index"] = "off"
 	
 	publisher_url = get_publisher_url()
 	if publisher_url:
@@ -40,11 +33,6 @@ def upload_article(request):
 	else:
 		# Do some error handling here.
 		pass
-
-	#js = json.dumps(article)
-	#jf = open('js.json', 'w')
-	#jf.write(js)
-	#jf.close()
 	
 	return render(request, "editor_page.html", {});
 
