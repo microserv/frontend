@@ -24,6 +24,7 @@ function keyboardHandler(e) {
             search();
             break;
         case 32:
+            wipeWordSuggestion();
             wordSuggestion();
             break;
         case 8:
@@ -90,7 +91,6 @@ function search() {
                 displayWordSuggestion(suggestion, 0)
             }
         }
-
     }
     else {
         wipeWordSuggestion();
@@ -154,7 +154,7 @@ function displayWordSuggestion(word, searchLength) {
     currentSuggestion = word;
     //searchLength = searchLength - word.length;
     var suggestionField = document.getElementById("wordSuggestionField");
-    if (word != "") {
+    if (word != "" && word != undefined) {
         if (completeSearch) {
             suggestionField.innerHTML = "<button id='wordSuggestionButton' onclick='replaceWordSuggestion()'>"
                 + "Mente du: " + word + " </button>";
