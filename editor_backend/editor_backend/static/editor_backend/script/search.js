@@ -49,8 +49,9 @@ function search() {
         wipeResults();
 
         var xhtmlSearch = new XMLHttpRequest();
-        xhtmlSearch.open("post", searchServer, true);
-        xhtmlSearch.send("{'Partial':'false', 'Query:'" + searchInput.value + "}");
+        xhtmlSearch.open("POST", searchServer);
+        xhtmlSearch.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhtmlSearch.send(JSON.stringify({'Partial':'false', 'Query': + searchInput.value }));
         xhtmlSearch.onreadystatechange = function() {
 
             if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
