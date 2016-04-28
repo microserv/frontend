@@ -136,7 +136,9 @@ function wordSuggestion() {
 
         if (xhtmlSearch.readyState == 4 && xhtmlSearch.status == 200) {
             var results = JSON.parse(xhtmlSearch.responseText);
-            displayWordSuggestion(results.spell[0][0], searchLength);
+            if (results.spell[0][0] != searchWord) {
+                displayWordSuggestion(results.spell[0][0], searchLength);
+            }
         }
     };
 }
