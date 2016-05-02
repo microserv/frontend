@@ -19,21 +19,21 @@ def get_publisher_url():
 def homepage(request):
 	return render(request, "homepage.html", {});
 
-def editor(request):	
+def editor(request):
 	return render(request, "editor_page.html", {});
-	
+
 def upload_article(request):
 	dict = request.POST.dict()
 	article = {"tags": dict["tags"], "description": dict["description"], "title": dict["title"]}
 	article["article"] = dict["article"].replace("src=\"//www.", "src=\"http://www.")
-	
+
 	publisher_url = get_publisher_url()
 	if publisher_url:
 		r = requests.post("http://"+publisher_url+"/save_article", data = article)
 	else:
 		# Do some error handling here.
 		pass
-	
+
 	return render(request, "editor_page.html", {});
 
 def articles(request):
