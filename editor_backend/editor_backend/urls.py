@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^articles/', articles, name='articles'),
     url(r'^search/', search, name='search'),
     url(r'^about/', about, name='about'),
-	url(r'^article/*', articles, name='article'),
+	url(r'^article/*', article, name='article'),
 ]
 
 if settings.DEBUG:
