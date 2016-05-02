@@ -7,5 +7,7 @@
 {% endblock %}
 
 {% block content %}
+{% autoescape off %}
 {{ article }}
+{% endautoescape %}
 {% endblock %}
