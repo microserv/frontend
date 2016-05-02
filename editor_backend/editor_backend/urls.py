@@ -24,6 +24,7 @@ from editor_backend.views import upload_article
 from editor_backend.views import articles
 from editor_backend.views import search
 from editor_backend.views import about
+from editor_backend.views import article
 
 
 urlpatterns = [
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^articles/', articles, name='articles'),
     url(r'^search/', search, name='search'),
     url(r'^about/', about, name='about'),
+	url(r'^article/*', articles, name='article'),
 ]
 
 if settings.DEBUG:

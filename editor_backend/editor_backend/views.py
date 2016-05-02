@@ -38,9 +38,7 @@ def upload_article(request):
 
 def articles(request):
 	r = requests.get(publish_base_url + "/list")
-	d = r.json()
-	d["publisher_url"] = publish_base_url
-	return render(request, "articles.html", d);
+	return render(request, "articles.html", r.json())
 
 def search(request):
     return render(request, "search.html", {});
@@ -48,3 +46,8 @@ def search(request):
 
 def about(request):
     return render(request, "about.html", {});
+
+def article(request):
+	id = request.path[-24:]
+	r = requests.get(publish_base_url + "/article_json/" + id)
+	return render(request, "article.html", r.json())
