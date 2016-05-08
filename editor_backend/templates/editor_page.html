@@ -50,6 +50,21 @@
 
                 }
 
+                // Initilize the dict 'templates' with the default templates,
+                // and fill the dropdown list with templates.
+                $.getJSON("/templates/api/v1/template/", function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var template_name = data[i]["Name"];
+                        templates[template_name] = data[i]["Html"];
+
+                        $('#template_selector').append($('<option/>', {
+                            value: template_name,
+                            text: template_name
+                        }));
+                     }
+                });
+
+
                 httpGetAsync("{% static 'editor_backend/templates/article.html' %}")
             </script>
 
