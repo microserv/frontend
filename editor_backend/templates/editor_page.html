@@ -50,6 +50,8 @@
 
                 }
 
+                var templates = {};
+
                 // Initilize the dict 'templates' with the default templates,
                 // and fill the dropdown list with templates.
                 $.getJSON("/templates/api/v1/template/", function(data) {
