@@ -55,6 +55,7 @@
                 // Initilize the dict 'templates' with the default templates,
                 // and fill the dropdown list with templates.
                 $.getJSON("/templates/api/v1/template/", function(data) {
+
                     for (var i = 0; i < data.length; i++) {
                         var template_name = data[i]["Name"];
                         templates[template_name] = data[i]["Html"];
@@ -64,10 +65,19 @@
                             text: template_name
                         }));
                      }
+                    var templateSelector = document.getElementById("template_selector");
+                    var selectedTemplate = templates[templateSelector[0].value];
+                    $('#summernote').summernote('code', selectedTemplate);
+                    
+                    templateSelector.addEventListener('change', function () {
+                        var selectedIndex = templateSelector.selectedIndex;
+                        selectedTemplate = templates[templateSelector[selectedIndex].value];
+                        $('#summernote').summernote('code', selectedTemplate);
+                    })
                 });
 
 
-                httpGetAsync("{% static 'editor_backend/templates/article.html' %}")
+                //httpGetAsync("{% static 'editor_backend/templates/article.html' %}")
             </script>
 
             <script>
