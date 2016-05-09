@@ -64,10 +64,16 @@
                             text: template_name
                         }));
                      }
+                    $('#template_selector').addEventListener('change', function () {
+                        var selectedIndex = $('#template_selector').selectedIndex;
+                        var selectedTemplate = templates[$('#template_selector')[selectedIndex].value];
+                        $('#summernote').summernote('code', selectedTemplate);
+                    })
+
                 });
 
 
-                httpGetAsync("{% static 'editor_backend/templates/article.html' %}")
+                //httpGetAsync("{% static 'editor_backend/templates/article.html' %}")
             </script>
 
             <script>
