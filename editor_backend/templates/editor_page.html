@@ -55,17 +55,17 @@
                 // Initilize the dict 'templates' with the default templates,
                 // and fill the dropdown list with templates.
                 $.getJSON("/templates/api/v1/template/", function(data) {
-                    var templateSelector = $('#template_selector');
+
                     for (var i = 0; i < data.length; i++) {
                         var template_name = data[i]["Name"];
                         templates[template_name] = data[i]["Html"];
 
-                        templateSelector.append($('<option/>', {
+                        $('#template_selector').append($('<option/>', {
                             value: template_name,
                             text: template_name
                         }));
                      }
-
+                    var templateSelector = document.getElementById("template_selector");
                     templateSelector.addEventListener('change', function () {
                         var selectedIndex = templateSelector.selectedIndex;
                         var selectedTemplate = templates[templateSelector[selectedIndex].value];
