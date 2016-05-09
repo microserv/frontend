@@ -37,8 +37,16 @@ def upload_article(request):
 	return render(request, "editor_page.html", {});
 
 def articles(request):
-	r = requests.get(publish_base_url + "/list")
-	return render(request, "articles.html", r.json())
+        r = requests.get(publish_base_url + "/list")
+
+        if r.url != publish_base_url + "/list":
+                return HttpResponseRedirect(r.url)
+
+        json_response = r.json()
+        if r.status_code == 200 and json_response:
+                return render(request, "articles.html", json_response)
+        else:
+                print(r)
 
 def search(request):
     return render(request, "search.html", {});
