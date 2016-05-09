@@ -66,12 +66,14 @@
                         }));
                      }
                     var templateSelector = document.getElementById("template_selector");
+                    var selectedTemplate = templates[templateSelector[0].value];
+                    $('#summernote').summernote('code', selectedTemplate);
+                    
                     templateSelector.addEventListener('change', function () {
                         var selectedIndex = templateSelector.selectedIndex;
-                        var selectedTemplate = templates[templateSelector[selectedIndex].value];
+                        selectedTemplate = templates[templateSelector[selectedIndex].value];
                         $('#summernote').summernote('code', selectedTemplate);
                     })
-
                 });
 
 
