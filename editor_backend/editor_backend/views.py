@@ -61,7 +61,7 @@ def upload_article(request):
 
 def articles(request):
     try:
-        r = requests.get(publish_base_url + "/list")
+        r = requests.get(publish_base_url + "/list", cookies=request.COOKIES)
     except ReqConnectionError:
         return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
 
