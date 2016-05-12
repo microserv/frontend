@@ -22,4 +22,6 @@ RUN pip install gunicorn
 WORKDIR ${BASE_DIR}/editor_backend
 RUN python manage.py collectstatic --noinput
 
+ENV SERVICE_NAME frontend
+
 EXPOSE 80
