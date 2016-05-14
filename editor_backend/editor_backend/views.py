@@ -1,8 +1,10 @@
 import json
+import logging
 import requests
 from django.http import HttpResponse, Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils import timezone
 from requests.exceptions import ConnectionError as ReqConnectionError
 
 NODE_ADDR = "http://127.0.0.1:9001"
@@ -60,20 +62,23 @@ def upload_article(request):
 
 
 def articles(request):
+    logger = logging.getLogger(__name__)
+    r = None
     try:
         request.COOKIES["next"] = "/articles/"
         r = requests.get(publish_base_url + "/list", cookies=request.COOKIES)
     except ReqConnectionError:
-        return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
+        logger.error('Publisher offline during article listing at %s.' % timezone.now())
 
-    if r.url != publish_base_url + "/list":
+    if r is not None and r.url != publish_base_url + "/list":
         return HttpResponseRedirect(r.url)
 
     json_response = r.json()
-    if r.status_code == 200 and json_response:
+    if r is not None and r.status_code == 200 and json_response:
         return render(request, "articles.html", json_response)
     else:
-        print(r)
+        logger.debug('Something went very wrong. Check editor_backend/views.py "articles"-function.')
+        return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
 
 
 def search(request):
@@ -85,15 +90,23 @@ def about(request):
 
 
 def article(request, pk=None):
+    logger = logging.getLogger(__name__)
+    r = None
+
     if pk is None:
         return Http404
 
     try:
         r = requests.get(publish_base_url + "/article_json/" + pk)
     except ReqConnectionError:
-        return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
+        logger.error('Publisher offline during request to fetch article "%s" at %s.' % (pk, timezone.now()))
 
-    if r.status_code != 200:
-        return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
+    if r.status_code == 404:
+        raise Http404
+    elif r.status_code != 200:
+        logger.error('Response status code from upstream was %s, not 200 OK. Actual response:\n%s'
+                     % (r.status_code, r.content))
+        return render(request, "article.html",
+                      {'article': '<h1>Error</h1><p>The article resource is offline. Please try again later</p>'})
 
     return render(request, "article.html", r.json())
