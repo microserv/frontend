@@ -64,12 +64,11 @@ class URLEndpointTestCase(SimpleTestCase):
         self.assertEqual(200, response.status_code)
 
     def test_get_article_detail_view(self):
-        url = reverse('article', args=(-1,))
+        url = reverse('article', args=(1,))
 
         response = self.client.get(url)
 
-        # 500 if service does not have the asked-for resource, otherwise it'll pass
-        self.assertEqual(500, response.status_code)
+        self.assertEqual(200, response.status_code)
 
     def test_get_search_view(self):
         url = reverse('articles')
