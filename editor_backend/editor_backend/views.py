@@ -68,7 +68,7 @@ def upload_article(request):
     publisher_url = get_publisher_url()
 
     if publisher_url:
-        requests.post("http://" + publisher_url + "/save_article", data=_article)
+        requests.post("http://" + publisher_url + "/save_article", data=_article, cookies=request.COOKIES)
     else:
         return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
 
