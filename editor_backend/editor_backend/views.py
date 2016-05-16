@@ -27,7 +27,21 @@ def homepage(request):
 
 
 def editor(request):
-    return render(request, "editor_page.html", {})
+    r = None
+    try:
+        request.COOKIES["next"] = "/editor/"
+        r = requests.get(publish_base_url + "/authorize_me", cookies=request.COOKIES)
+    except ReqConnectionError:
+        logger.error('Publisher offline when attempting to authorize %s.' % timezone.now())
+
+    if r is not None and r.url != publish_base_url + "/authorize_me":
+        return HttpResponseRedirect(r.url)
+
+    if r is not None and r.status_code == 200:
+            return render(request, "editor_page.html", {})
+    else:
+        logger.debug('Something went very wrong. Check editor_backend/views.py "articles"-function.')
+        return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
 
 
 def upload_article(request):
