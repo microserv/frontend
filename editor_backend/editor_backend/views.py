@@ -27,6 +27,7 @@ def homepage(request):
 
 
 def editor(request):
+    logger = logging.getLogger(__name__)
     r = None
     try:
         request.COOKIES["next"] = "/editor/"
