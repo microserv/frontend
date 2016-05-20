@@ -42,8 +42,8 @@ function keyboardHandler(e) {
 function search() {
     if (searchInput.value != "") {
         completeSearch = true;
-        var searchServer = "http://despina.128.no/api/search";
-        var articleServer ="http://despina.128.no/publish/article_json/";
+        var searchServer = "https://despina.128.no/api/search";
+        var articleServer ="https://despina.128.no/publish/article_json/";
 
         var searchWords = searchInput.value.split(" ");
 
@@ -119,7 +119,7 @@ function wipeWordSuggestion() {
  * providing displayWordSuggestion() with necessary info
  */
 function wordSuggestion() {
-    var searchServer = "http://despina.128.no/api/search";
+    var searchServer = "https://despina.128.no/api/search";
     var searchWords = searchInput.value.split(" ");
 
     var searchWord = searchWords[searchWords.length -2];
@@ -204,7 +204,7 @@ function replaceWordSuggestion() {
 function addArticleToResult(article) {
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
-        '<a href=" ' + "http://despina.128.no/publish/article/" + article._id + ' "> ' +
+        '<a href=" ' + "https://despina.128.no/publish/article/" + article._id + ' "> ' +
         '<h3> ' + article.title + ' </h3> ' +
         '<p>' + article.description + ' </p> ' +
         '</a> ' +
