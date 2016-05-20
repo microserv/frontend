@@ -8,7 +8,7 @@ from django.utils import timezone
 from requests.exceptions import ConnectionError as ReqConnectionError
 
 NODE_ADDR = "http://127.0.0.1:9001"
-publish_base_url = "http://despina.128.no/publish"
+publish_base_url = "https://despina.128.no/publish"
 
 
 def get_publisher_url():
@@ -64,12 +64,12 @@ def upload_article(request):
         "title": article_tags
     }
 
-    _article["article"] = article_content.replace("src=\"//www.", "src=\"http://www.")
+    _article["article"] = article_content.replace("src=\"//www.", "src=\"https://www.")
 
     publisher_url = get_publisher_url()
 
     if publisher_url:
-        requests.post("http://" + publisher_url + "/save_article", data=_article, cookies=request.COOKIES)
+        requests.post("https://" + publisher_url + "/save_article", data=_article, cookies=request.COOKIES)
     else:
         return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
 
