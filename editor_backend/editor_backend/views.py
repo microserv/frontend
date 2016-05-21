@@ -8,7 +8,6 @@ from django.utils import timezone
 from requests.exceptions import ConnectionError as ReqConnectionError
 
 NODE_ADDR = "http://127.0.0.1:9001"
-publish_base_url = "https://despina.128.no/publish"
 
 
 def get_publisher_url():
@@ -19,7 +18,7 @@ def get_publisher_url():
     except ReqConnectionError:
         return None
 
-    return response_as_json
+    return "http://" + response_as_json
 
 
 def homepage(request):
@@ -28,14 +27,15 @@ def homepage(request):
 
 def editor(request):
     logger = logging.getLogger(__name__)
+    publisher_url = get_publisher_url()
     r = None
     try:
         request.COOKIES["next"] = "/editor/"
-        r = requests.get(publish_base_url + "/authorize_me", cookies=request.COOKIES)
+        r = requests.get(publisher_url + "/authorize_me", cookies=request.COOKIES)
     except ReqConnectionError:
         logger.error('Publisher offline when attempting to authorize %s.' % timezone.now())
 
-    if r is not None and r.url != publish_base_url + "/authorize_me":
+    if r is not None and r.url != publisher_url + "/authorize_me":
         return HttpResponseRedirect(r.url)
 
     if r is not None and r.status_code == 200:
@@ -69,7 +69,7 @@ def upload_article(request):
     publisher_url = get_publisher_url()
 
     if publisher_url:
-        requests.post("https://" + publisher_url + "/save_article", data=_article, cookies=request.COOKIES)
+        requests.post(publisher_url + "/save_article", data=_article, cookies=request.COOKIES)
     else:
         return HttpResponse(status=500, content='Internal Server Error. Please try again later.')
 
@@ -78,14 +78,15 @@ def upload_article(request):
 
 def articles(request):
     logger = logging.getLogger(__name__)
+    publisher_url = get_publisher_url()
     r = None
     try:
         request.COOKIES["next"] = "/articles/"
-        r = requests.get(publish_base_url + "/list", cookies=request.COOKIES)
+        r = requests.get(publisher_url + "/list", cookies=request.COOKIES)
     except ReqConnectionError:
         logger.error('Publisher offline during article listing at %s.' % timezone.now())
 
-    if r is not None and r.url != publish_base_url + "/list":
+    if r is not None and r.url != publisher_url + "/list":
         return HttpResponseRedirect(r.url)
 
     json_response = r.json()
@@ -106,13 +107,14 @@ def about(request):
 
 def article(request, pk=None):
     logger = logging.getLogger(__name__)
+    publisher_url = get_publisher_url()
     r = None
 
     if pk is None:
         return Http404
 
     try:
-        r = requests.get(publish_base_url + "/article_json/" + pk)
+        r = requests.get(publisher_url + "/article_json/" + pk)
     except ReqConnectionError:
         logger.error('Publisher offline during request to fetch article "%s" at %s.' % (pk, timezone.now()))
 
