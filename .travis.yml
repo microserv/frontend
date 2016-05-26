@@ -1,0 +1,17 @@
+language: python
+python:
+  - 3.4
+  - 3.5
+
+install:
+  - pip install pytest pytest-cov pytest-django python-coveralls
+  - pip install -r requirements.txt
+
+script:
+  - cd editor_backend
+  - py.test editor_backend --cov=.
+
+after_success:
+  coveralls
+
+sudo: false
