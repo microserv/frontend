@@ -61,7 +61,7 @@ def upload_article(request):
     _article = {
         "tags": article_tags,
         "description": article_description,
-        "title": article_tags
+        "title": article_title
     }
 
     _article["article"] = article_content.replace("src=\"//www.", "src=\"https://www.")
