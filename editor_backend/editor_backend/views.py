@@ -41,7 +41,16 @@ def editor(request):
         return render(request, "editor_page.html", {})
 
     if r is not None and r.url != publisher_url + "/authorize_me":
-        return HttpResponseRedirect(r.url)
+        response = HttpResponseRedirect(r.url)
+        # As we want to continue the OAUTH2 flow first begun when requesting
+        # '/authorize_me', we have to obtain the session ID used previously, and then add
+        # this to the current session. If it is set multiple times, we use the one set last.
+        for prev_req in r.history:
+             prev_session_id = prev_req.request._cookies.get("connect.sid")
+             if prev_session_id:
+                response.set_cookie("connect.sid", prev_session_id)
+
+        return response
 
     if r is not None and r.status_code == 200:
             return render(request, "editor_page.html", {})
