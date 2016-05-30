@@ -203,7 +203,7 @@ function replaceWordSuggestion() {
 function addArticleToResult(article) {
     searchResultHtml.innerHTML +=
         '<div class="searchResult"> ' +
-        '<a href=" ' + "/publish/article/" + article._id + ' "> ' +
+        '<a href=" ' + "/article/" + article._id + ' "> ' +
         '<h3> ' + article.title + ' </h3> ' +
         '<p>' + article.description + ' </p> ' +
         '</a> ' +
