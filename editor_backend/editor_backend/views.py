@@ -34,6 +34,11 @@ def editor(request):
         r = requests.get(publisher_url + "/authorize_me", cookies=request.COOKIES)
     except ReqConnectionError:
         logger.error('Publisher offline when attempting to authorize %s.' % timezone.now())
+    except TypeError:
+        logger.error('Cannot retrieve publisher URL from backend communication service.')
+
+    if r is None:
+        return render(request, "editor_page.html", {})
 
     if r is not None and r.url != publisher_url + "/authorize_me":
         return HttpResponseRedirect(r.url)
@@ -85,6 +90,11 @@ def articles(request):
         r = requests.get(publisher_url + "/list", cookies=request.COOKIES)
     except ReqConnectionError:
         logger.error('Publisher offline during article listing at %s.' % timezone.now())
+    except TypeError:
+        logger.error('Cannot retrieve publisher URL from backend communication service.')
+
+    if r is None:
+        return render(request, "articles.html", {})
 
     if r is not None and r.url != publisher_url + "/list":
         return HttpResponseRedirect(r.url)
@@ -117,6 +127,12 @@ def article(request, pk=None):
         r = requests.get(publisher_url + "/article_json/" + pk)
     except ReqConnectionError:
         logger.error('Publisher offline during request to fetch article "%s" at %s.' % (pk, timezone.now()))
+    except TypeError:
+        logger.error('Cannot retrieve publisher URL from backend communication service.')
+
+    if r is None:
+        return render(request, "article.html",
+                      {'article': '<h1>Error</h1><p>The article resource is offline. Please try again later</p>'})
 
     if r.status_code == 404:
         raise Http404
